@@ -6,6 +6,7 @@
 */
 
 (function($) {
+  
   $.fn.extend({
     display_slider: function(options){
   
@@ -72,6 +73,15 @@
           n++;
         }
       );
+
+      var bt_prev= $('<a href="#" class="prev">Prev</a>');
+      var bt_next = $('<a href="#" class="next">Next</a>');
+      bt_next.click(next);
+      bt_prev.click(prev);
+      
+      navigation.append(bt_prev);
+      navigation.append(bt_next);
+            
       
       if(options.show_navigation){
         display.append(navigation);  
@@ -103,6 +113,21 @@
         play();  
       }
     }
+    function prev(){
+      
+      clearTimeout(play_timer);
+
+      transition_out(current_idx,-1);
+       
+      current_idx -=1;
+      if(current_idx < 0 )current_idx = slides.length-1 // back to 0
+      
+      transition_in(current_idx,-1)
+      
+      return false;
+
+    }
+        
     
     function transition_in(idx){
  
@@ -127,6 +152,14 @@
       }
     }
     
+ 
+    display.each(function(){
+      this.next = function(){ next()};
+      this.prev = function(){ prev()};
+      this.show_slide = function(idx){ show_slide(idx) };
+       
+    });
+    return this;
  
   }
   });
